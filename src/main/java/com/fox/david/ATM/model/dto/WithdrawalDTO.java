@@ -4,7 +4,7 @@ public class WithdrawalDTO {
     int amount;
     int pin;
 
-    public WithdrawalDTO(String accountId, int amount, int pin) {
+    public WithdrawalDTO( int amount, int pin) {
         this.amount = amount;
         this.pin = pin;
     }

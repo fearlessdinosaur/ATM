@@ -7,14 +7,12 @@ import com.fox.david.ATM.model.dto.AccountDTO;
 import com.fox.david.ATM.model.dto.WithdrawalDTO;
 import com.fox.david.ATM.model.repository.AccountRepository;
 import com.fox.david.ATM.system.ATMRunner;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import static org.mockito.ArgumentMatchers.any;
+import org.springframework.http.ResponseEntity;
 
 @SpringBootTest
 public class ATMRunnerTest {
@@ -37,12 +35,17 @@ public class ATMRunnerTest {
     @BeforeEach
     void init() {
         atmRunner = new ATMRunner(accountDAO, transactionDAO);
-        id = accountRepository.save(new Account(1234,200,100)).getId();
+        id = accountRepository.save(new Account(1L, 1234, 200, 100)).getId();
     }
 
     @Test
-    void testValidWithdrawalRequest() {
+    void testValidWithdrawalRequest() throws Exception {
+        withdrawalDTO = new WithdrawalDTO(50, 1234);
 
+        ResponseEntity<AccountDTO> payload = atmRunner.withdrawFunds(withdrawalDTO,id);
+        AccountDTO dto = payload.getBody();
+        Assertions.assertEquals(150, dto.getBalance());
+        Assertions.assertEquals(100, dto.getOverdraft());
     }
 
     @Test
@@ -67,8 +70,30 @@ public class ATMRunnerTest {
 
     @Test
     void testValidBalanceRequest() throws Exception {
-        withdrawalDTO = new WithdrawalDTO("1", 0, 1234);
-        atmRunner.getBalance(withdrawalDTO, id);
+        withdrawalDTO = new WithdrawalDTO(0, 1234);
+
+        ResponseEntity<AccountDTO> payload = atmRunner.getBalance(withdrawalDTO, id);
+        AccountDTO dto = payload.getBody();
+        Assertions.assertEquals(200, dto.getBalance());
+        Assertions.assertEquals(100, dto.getOverdraft());
+    }
+
+    @Test
+    void testInvalidBalanceRequest_IncorrectPin() {
+        withdrawalDTO = new WithdrawalDTO(0, 1236);
+
+        Assertions.assertThrows(Exception.class, () -> {
+            atmRunner.getBalance(withdrawalDTO, id);
+        });
+    }
+
+    @Test
+    void testInvalidBalanceRequest_AccountDoesNotExist() {
+        withdrawalDTO = new WithdrawalDTO(0, 1234);
+
+        Assertions.assertThrows(Exception.class, () -> {
+            atmRunner.getBalance(withdrawalDTO, 663613613L);
+        });
     }
 
 }

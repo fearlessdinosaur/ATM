@@ -8,19 +8,25 @@ import java.util.List;
 public class Account {
 
     @Id
-    @GeneratedValue
     private Long id;
 
     private int pin;
 
-    private float balance;
+    private int balance;
 
-    private float overdraft;
+    private int overdraft;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "account", cascade = CascadeType.ALL)
     List<Transaction> transactions = new ArrayList<>();
 
     public Account(int pin, int balance, int overdraft) {
+        this.pin = pin;
+        this.balance = balance;
+        this.overdraft = overdraft;
+    }
+
+    public Account(long id,int pin, int balance, int overdraft) {
+        this.id = id;
         this.pin = pin;
         this.balance = balance;
         this.overdraft = overdraft;
@@ -46,19 +52,19 @@ public class Account {
         this.pin = pin;
     }
 
-    public float getBalance() {
+    public int getBalance() {
         return balance;
     }
 
-    public void setBalance(float balance) {
+    public void setBalance(int balance) {
         this.balance = balance;
     }
 
-    public float getOverdraft() {
+    public int getOverdraft() {
         return overdraft;
     }
 
-    public void setOverdraft(float overdraft) {
+    public void setOverdraft(int overdraft) {
         this.overdraft = overdraft;
     }
 
