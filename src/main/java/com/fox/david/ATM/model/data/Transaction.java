@@ -15,13 +15,16 @@ public class Transaction {
 
     @ManyToOne()
     @JoinColumn(name = "ACCOUNT_ID")
-    String account;
+    Account account;
 
-    public Transaction(String value, String account){
+    public Transaction(String value, Account account){
         this.value = value;
         this.account = account;
     }
 
+    public Transaction(){
+
+    }
 
     public String getId() {
         return id;

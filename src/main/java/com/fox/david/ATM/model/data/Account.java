@@ -9,9 +9,9 @@ public class Account {
 
     @Id
     @GeneratedValue
-    private String id;
+    private Long id;
 
-    private String pin;
+    private int pin;
 
     private float balance;
 
@@ -20,20 +20,29 @@ public class Account {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "account", cascade = CascadeType.ALL)
     List<Transaction> transactions = new ArrayList<>();
 
+    public Account(int pin, int balance, int overdraft) {
+        this.pin = pin;
+        this.balance = balance;
+        this.overdraft = overdraft;
+    }
 
-    public String getId() {
+    public Account() {
+
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getPin() {
+    public int getPin() {
         return pin;
     }
 
-    public void setPin(String pin) {
+    public void setPin(int pin) {
         this.pin = pin;
     }
 
