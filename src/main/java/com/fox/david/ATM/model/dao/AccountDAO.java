@@ -6,6 +6,8 @@ import com.fox.david.ATM.model.repository.AccountRepository;
 import com.fox.david.ATM.utils.AccountToDTOMapper;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 public class AccountDAO {
     AccountRepository accountRepository;
@@ -34,6 +36,23 @@ public class AccountDAO {
     public boolean checkPin(long id, int pin) throws Exception {
         if (accountRepository.findById(id).isPresent()) {
             return pin == accountRepository.findById(id).get().getPin();
+        }
+        throw new Exception("No Account Found");
+    }
+
+    public AccountDTO withdrawFunds(int amount, Long id) throws Exception {
+        Optional<Account> optionalAccount = accountRepository.findById(id);
+        if (optionalAccount.isPresent()) {
+            Account account = optionalAccount.get();
+
+            if (account.getBalance() < amount) {
+                account.setBalance(0);
+                account.setOverdraft(account.getOverdraft() - (amount - account.getBalance()));
+            } else {
+                account.setBalance(account.getBalance() - amount);
+            }
+
+            return AccountToDTOMapper.mapAccountToAccountDTO(accountRepository.save(account));
         }
         throw new Exception("No Account Found");
     }
