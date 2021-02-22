@@ -1,7 +1,6 @@
 package com.fox.david.ATM.System;
 
 import com.fox.david.ATM.model.dao.AccountDAO;
-import com.fox.david.ATM.model.dao.TransactionDAO;
 import com.fox.david.ATM.model.data.Account;
 import com.fox.david.ATM.model.dto.AccountDTO;
 import com.fox.david.ATM.model.dto.WithdrawalDTO;
@@ -25,9 +24,6 @@ public class ATMRunnerTest {
     @Autowired
     AccountRepository accountRepository;
 
-    @Autowired
-    TransactionDAO transactionDAO;
-
     ATMRunner atmRunner;
 
     long id;
@@ -36,7 +32,7 @@ public class ATMRunnerTest {
 
     @BeforeEach
     void init() {
-        atmRunner = new ATMRunner(accountDAO, transactionDAO);
+        atmRunner = new ATMRunner(accountDAO);
         id = accountRepository.save(new Account(6L, 1234, 200, 100)).getId();
 
     }

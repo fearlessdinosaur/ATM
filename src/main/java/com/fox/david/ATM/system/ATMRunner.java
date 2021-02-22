@@ -1,7 +1,6 @@
 package com.fox.david.ATM.system;
 
 import com.fox.david.ATM.model.dao.AccountDAO;
-import com.fox.david.ATM.model.dao.TransactionDAO;
 import com.fox.david.ATM.model.dto.AccountDTO;
 import com.fox.david.ATM.model.dto.WithdrawalDTO;
 import com.fox.david.ATM.utils.CurrencyUtil;
@@ -17,12 +16,10 @@ import java.util.Map;
 public class ATMRunner {
     Logger LOGGER = Logger.getLogger(this.getClass().getName());
     AccountDAO accountDAO;
-    TransactionDAO transactionDAO;
     public LinkedHashMap<String, Integer> availableCurrency;
 
-    public ATMRunner(AccountDAO accountDAO, TransactionDAO transactionDAO) {
+    public ATMRunner(AccountDAO accountDAO) {
         this.accountDAO = accountDAO;
-        this.transactionDAO = transactionDAO;
 
         availableCurrency = CurrencyUtil.setUpCurrency(10, 30, 30, 20);
     }
@@ -111,18 +108,20 @@ public class ATMRunner {
     private LinkedHashMap<String, Integer> parseCash(LinkedHashMap<String, Integer> availableCurrency, int i, char charAt) {
         double numericValue = Integer.parseInt(String.valueOf(charAt)) * (Math.pow(10, i));
         for (Map.Entry<String, Integer> cursor : availableCurrency.entrySet()) {
+            //Subtracts the value of the key from the numeric value until either reach zero.
             while (numericValue > 0 && cursor.getValue() > 0) {
+                //Breaks the loop if numeric value - the cursor value is less than zero
                 if (numericValue - Integer.parseInt(cursor.getKey()) >= 0) {
                     numericValue = numericValue - Integer.parseInt(cursor.getKey());
+                    //counts the cursor down by one
                     cursor.setValue(cursor.getValue() - 1);
                 } else {
                     break;
                 }
             }
-
-            if (cursor.getKey().equals("total") && numericValue != 0) {
-                return null;
-            }
+        }
+        if (numericValue != 0) {
+            return null;
         }
         return availableCurrency;
     }

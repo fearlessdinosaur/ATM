@@ -50,6 +50,7 @@ public class AccountDAO {
     public AccountDTO withdrawFunds(int amount, Long id, LinkedHashMap<String, Integer> map) throws Exception {
         Account account = getAccount(id);
         if (account != null) {
+            //check if the amount required is larger than the balance
             if (account.getBalance() < amount) {
                 account.setBalance(0);
                 account.setOverdraft(account.getOverdraft() - (amount - account.getBalance()));

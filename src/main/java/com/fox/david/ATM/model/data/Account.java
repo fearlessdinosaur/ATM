@@ -1,8 +1,7 @@
 package com.fox.david.ATM.model.data;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 @Entity
 public class Account {
@@ -15,9 +14,6 @@ public class Account {
     private int balance;
 
     private int overdraft;
-
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "account", cascade = CascadeType.ALL)
-    List<Transaction> transactions = new ArrayList<>();
 
     public Account(int pin, int balance, int overdraft) {
         this.pin = pin;
@@ -66,13 +62,5 @@ public class Account {
 
     public void setOverdraft(int overdraft) {
         this.overdraft = overdraft;
-    }
-
-    public List<Transaction> getTransactions() {
-        return transactions;
-    }
-
-    public void setTransactions(List<Transaction> transactions) {
-        this.transactions = transactions;
     }
 }
