@@ -3,7 +3,7 @@ package com.fox.david.ATM.model.dto;
 public class AccountDTO {
     int balance;
     int overdraft;
-    String errors;
+    String message;
 
     public AccountDTO(int balance, int overdraft) {
         this.balance = balance;
@@ -30,11 +30,11 @@ public class AccountDTO {
         this.overdraft = overdraft;
     }
 
-    public String getErrors() {
-        return errors;
+    public String getMessage() {
+        return message;
     }
 
-    public void setErrors(String errors) {
-        this.errors = errors;
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

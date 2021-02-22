@@ -14,4 +14,15 @@ public class AccountToDTOMapper {
         }
         return null;
     }
+
+    public static AccountDTO mapAccountToAccountDTOWithMessage(Account account, String message) {
+        if (account != null) {
+            AccountDTO dto = new AccountDTO();
+            dto.setBalance(account.getBalance());
+            dto.setOverdraft(account.getOverdraft());
+            dto.setMessage(message);
+            return dto;
+        }
+        return null;
+    }
 }

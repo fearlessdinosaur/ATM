@@ -7,6 +7,8 @@ import com.fox.david.ATM.model.dto.AccountDTO;
 import com.fox.david.ATM.model.dto.WithdrawalDTO;
 import com.fox.david.ATM.model.repository.AccountRepository;
 import com.fox.david.ATM.system.ATMRunner;
+import com.fox.david.ATM.utils.CurrencyUtil;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,16 +37,32 @@ public class ATMRunnerTest {
     @BeforeEach
     void init() {
         atmRunner = new ATMRunner(accountDAO, transactionDAO);
-        id = accountRepository.save(new Account(1L, 1234, 200, 100)).getId();
+        id = accountRepository.save(new Account(6L, 1234, 200, 100)).getId();
+
+    }
+
+    @AfterEach
+    void after() {
+        atmRunner.availableCurrency = CurrencyUtil.setUpCurrency(10, 30, 30, 20);
     }
 
     @Test
-    void testValidWithdrawalRequest() throws Exception {
+    void testValidWithdrawalRequest_SmallAmount() {
         withdrawalDTO = new WithdrawalDTO(50, 1234);
 
-        ResponseEntity<AccountDTO> payload = atmRunner.withdrawFunds(withdrawalDTO,id);
+        ResponseEntity<AccountDTO> payload = atmRunner.withdrawFunds(withdrawalDTO, id);
         AccountDTO dto = payload.getBody();
         Assertions.assertEquals(150, dto.getBalance());
+        Assertions.assertEquals(100, dto.getOverdraft());
+    }
+
+    @Test
+    void testValidWithdrawalRequest_LargeAmount() {
+        withdrawalDTO = new WithdrawalDTO(125, 1234);
+
+        ResponseEntity<AccountDTO> payload = atmRunner.withdrawFunds(withdrawalDTO, id);
+        AccountDTO dto = payload.getBody();
+        Assertions.assertEquals(75, dto.getBalance());
         Assertions.assertEquals(100, dto.getOverdraft());
     }
 
@@ -55,7 +73,7 @@ public class ATMRunnerTest {
         ResponseEntity<AccountDTO> payload = atmRunner.withdrawFunds(withdrawalDTO, id);
 
         AccountDTO dto = payload.getBody();
-        Assertions.assertNotNull(dto.getErrors());
+        Assertions.assertNotNull(dto.getMessage());
     }
 
     @Test
@@ -65,7 +83,17 @@ public class ATMRunnerTest {
         ResponseEntity<AccountDTO> payload = atmRunner.withdrawFunds(withdrawalDTO, 234L);
 
         AccountDTO dto = payload.getBody();
-        Assertions.assertNotNull(dto.getErrors());
+        Assertions.assertNotNull(dto.getMessage());
+    }
+
+    @Test
+    void testInvalidWithdrawalRequest_InvalidAmountRequested() {
+        withdrawalDTO = new WithdrawalDTO(123, 1234);
+
+        ResponseEntity<AccountDTO> payload = atmRunner.withdrawFunds(withdrawalDTO, id);
+
+        AccountDTO dto = payload.getBody();
+        Assertions.assertNotNull(dto.getMessage());
     }
 
     @Test
@@ -76,12 +104,18 @@ public class ATMRunnerTest {
         ResponseEntity<AccountDTO> payload = atmRunner.withdrawFunds(withdrawalDTO, id);
 
         AccountDTO dto = payload.getBody();
-        Assertions.assertNotNull(dto.getErrors());
+        Assertions.assertNotNull(dto.getMessage());
     }
 
     @Test
     void testInvalidWithdrawalRequest_NotEnoughInATM() {
+        atmRunner.availableCurrency.put("total", 100);
+        withdrawalDTO = new WithdrawalDTO(105, 1234);
 
+        ResponseEntity<AccountDTO> payload = atmRunner.withdrawFunds(withdrawalDTO, id);
+
+        AccountDTO dto = payload.getBody();
+        Assertions.assertNotNull(dto.getMessage());
     }
 
     @Test
@@ -101,17 +135,16 @@ public class ATMRunnerTest {
         ResponseEntity<AccountDTO> payload = atmRunner.getBalance(withdrawalDTO, id);
 
         AccountDTO dto = payload.getBody();
-        Assertions.assertNotNull(dto.getErrors());
+        Assertions.assertNotNull(dto.getMessage());
     }
 
     @Test
     void testInvalidBalanceRequest_AccountDoesNotExist() {
         withdrawalDTO = new WithdrawalDTO(0, 1234);
 
-
         ResponseEntity<AccountDTO> payload = atmRunner.getBalance(withdrawalDTO, 663613613L);
         AccountDTO dto = payload.getBody();
-        Assertions.assertNotNull(dto.getErrors());
+        Assertions.assertNotNull(dto.getMessage());
     }
 
 }

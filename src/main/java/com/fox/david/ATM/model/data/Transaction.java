@@ -1,23 +1,21 @@
 package com.fox.david.ATM.model.data;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity
 public class Transaction {
 
     @Id
-    String id;
+    @GeneratedValue
+    Long id;
 
-    String value;
+    int value;
 
     @ManyToOne()
     @JoinColumn(name = "ACCOUNT_ID")
     Account account;
 
-    public Transaction(String value, Account account){
+    public Transaction(int value, Account account) {
         this.value = value;
         this.account = account;
     }
@@ -26,19 +24,19 @@ public class Transaction {
 
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getValue() {
+    public int getValue() {
         return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(int value) {
         this.value = value;
     }
 }

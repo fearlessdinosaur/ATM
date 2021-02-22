@@ -8,7 +8,7 @@ import java.util.List;
 public class Account {
 
     @Id
-    private Long id;
+    private Long accountId;
 
     private int pin;
 
@@ -26,7 +26,7 @@ public class Account {
     }
 
     public Account(long id,int pin, int balance, int overdraft) {
-        this.id = id;
+        this.accountId = id;
         this.pin = pin;
         this.balance = balance;
         this.overdraft = overdraft;
@@ -37,11 +37,11 @@ public class Account {
     }
 
     public Long getId() {
-        return id;
+        return accountId;
     }
 
     public void setId(Long id) {
-        this.id = id;
+        this.accountId = id;
     }
 
     public int getPin() {
