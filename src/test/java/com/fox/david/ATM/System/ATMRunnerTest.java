@@ -70,6 +70,8 @@ public class ATMRunnerTest {
 
         AccountDTO dto = payload.getBody();
         Assertions.assertNotNull(dto.getMessage());
+        Assertions.assertEquals(0,dto.getBalance());
+        Assertions.assertEquals(0, dto.getOverdraft());
     }
 
     @Test
@@ -80,6 +82,8 @@ public class ATMRunnerTest {
 
         AccountDTO dto = payload.getBody();
         Assertions.assertNotNull(dto.getMessage());
+        Assertions.assertEquals(0,dto.getBalance());
+        Assertions.assertEquals(0, dto.getOverdraft());
     }
 
     @Test
@@ -90,6 +94,8 @@ public class ATMRunnerTest {
 
         AccountDTO dto = payload.getBody();
         Assertions.assertNotNull(dto.getMessage());
+        Assertions.assertEquals(0,dto.getBalance());
+        Assertions.assertEquals(0, dto.getOverdraft());
     }
 
     @Test
@@ -101,6 +107,8 @@ public class ATMRunnerTest {
 
         AccountDTO dto = payload.getBody();
         Assertions.assertNotNull(dto.getMessage());
+        Assertions.assertEquals(0,dto.getBalance());
+        Assertions.assertEquals(0, dto.getOverdraft());
     }
 
     @Test
@@ -112,6 +120,8 @@ public class ATMRunnerTest {
 
         AccountDTO dto = payload.getBody();
         Assertions.assertNotNull(dto.getMessage());
+        Assertions.assertEquals(0,dto.getBalance());
+        Assertions.assertEquals(0, dto.getOverdraft());
     }
 
     @Test
@@ -132,6 +142,8 @@ public class ATMRunnerTest {
 
         AccountDTO dto = payload.getBody();
         Assertions.assertNotNull(dto.getMessage());
+        Assertions.assertEquals(0,dto.getBalance());
+        Assertions.assertEquals(0, dto.getOverdraft());
     }
 
     @Test
@@ -141,6 +153,8 @@ public class ATMRunnerTest {
         ResponseEntity<AccountDTO> payload = atmRunner.getBalance(withdrawalDTO, 663613613L);
         AccountDTO dto = payload.getBody();
         Assertions.assertNotNull(dto.getMessage());
+        Assertions.assertEquals(0,dto.getBalance());
+        Assertions.assertEquals(0, dto.getOverdraft());
     }
 
 }

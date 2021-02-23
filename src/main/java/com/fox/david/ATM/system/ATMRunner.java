@@ -31,7 +31,7 @@ public class ATMRunner {
             LOGGER.info("Getting balance for account number " + id);
             if (accountDAO.checkPin(id, dto.getPin())) {
                 LOGGER.info("pin accepted, returning balance for account number " + id);
-                AccountDTO accountDTO = accountDAO.getBalance(id);
+                AccountDTO accountDTO = accountDAO.getBalance(id,availableCurrency.get("total"));
                 return new ResponseEntity<>(accountDTO, HttpStatus.OK);
             } else {
                 LOGGER.error("Incorrect PIN number given for account number " + id);

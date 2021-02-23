@@ -19,6 +19,7 @@ public class CurrencyUtil {
         int total = (50 * fifties) + (20 * twenties) + (10 * tens) + (5 * fives);
 
         hashmap.put("total", total);
+        LOGGER.info("Total currency:" + total);
         return hashmap;
     }
 }

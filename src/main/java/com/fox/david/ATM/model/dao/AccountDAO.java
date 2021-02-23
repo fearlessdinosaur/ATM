@@ -29,10 +29,16 @@ public class AccountDAO {
     }
 
 
-    public AccountDTO getBalance(long id) throws Exception {
+    public AccountDTO getBalance(long id, int maxAvailableCurrency) throws Exception {
         Account account = getAccount(id);
         if (account != null) {
-            return AccountToDTOMapper.mapAccountToAccountDTO(account);
+            String message;
+            if ((account.getBalance() + account.getOverdraft()) <= maxAvailableCurrency) {
+                message = "max available withdrawl:" + (account.getBalance() + account.getOverdraft());
+            } else {
+                message = "max available withdrawl:" + (maxAvailableCurrency);
+            }
+            return AccountToDTOMapper.mapAccountToAccountDTOWithMessage(account, message);
         }
         LOGGER.error("Account with id " + id + "does not exist");
         throw new Exception("No Account Found");
