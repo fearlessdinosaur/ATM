@@ -38,9 +38,28 @@
 		{
 			"name": "Withdraw Funds",
 			"request": {
-				"method": "GET",
+				"method": "POST",
 				"header": [],
-				"url": null
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"pin\": 1234,\r\n    \"amount\": 100\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/account/{{id}}/withdraw",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"account",
+						"{{id}}",
+						"withdraw"
+					]
+				}
 			},
 			"response": []
 		}
